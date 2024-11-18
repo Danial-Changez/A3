@@ -1,6 +1,6 @@
 # Compiler and flags
 CC = gcc
-CFLAGS = -Wall -Werror -g
+CFLAGS = -Wall -std=c99 -pedantic
 
 # Source files
 q1_SRCS = a3q1_main.c a3q1_functions.c

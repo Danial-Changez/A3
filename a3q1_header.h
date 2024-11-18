@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include <ctype.h>
 
 #ifndef BINARY_TREE
@@ -23,6 +24,7 @@ typedef struct
 extern Variable variables[10];
 extern int varCount;
 
+bool areParenthesesBalanced(const char *expr);
 Variable *getOrCreateVariable(char *name);
 Node *createNode(char *data);
 Node *parseExpression(char *expr);
