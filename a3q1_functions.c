@@ -19,23 +19,6 @@ Node *createNode(char *data)
 	return newNode;
 }
 
-// The areParenthesesBalanced checks if all paratheses are closed by the end of the expression.
-bool areParenthesesBalanced(const char *expr)
-{
-	int balance = 0;
-	// Checks all characters besides null character
-	for (int i = 0; expr[i] < strlen(expr); i++)
-	{
-		if (expr[i] == '(')
-			balance++;
-		if (expr[i] == ')')
-			balance--;
-		if (balance < 0)
-			return false; // More closing than opening
-	}
-	return true;
-}
-
 // The parseExpression function parses the expression string passed in from command line, stores the information in a new node, and returns the root node of the tree.
 Node *parseExpression(char *expr)
 {
@@ -46,12 +29,6 @@ Node *parseExpression(char *expr)
 	// If a single variable or number
 	if (expr[0] != '(')
 		return createNode(expr);
-
-	if (areParenthesesBalanced(expr))
-	{
-		printf("Unbalanced parantheses in expression %s\n", expr);
-		return NULL;
-	}
 
 	// Location of main operator
 	int brackets = 0, operatorPos = -1;
@@ -124,23 +101,6 @@ void postorder(Node *root)
 	printf("%s ", root->data);
 }
 
-// The getOrCreateVariable function gets variable from array (if it exists), otherwise creates a new entry.
-Variable *getOrCreateVariable(char *name)
-{
-	// Check if the variable already exists in the list
-	for (int i = 0; i < varCount; i++)
-	{
-		if (strcmp(variables[i].varName, name) == 0)
-			return &variables[i];
-	}
-
-	// If not found, create a new variable entry
-	Variable *var = &variables[varCount++];
-	strcpy(var->varName, name);
-	var->value = 0.0;
-	return var;
-}
-
 // The promptVariables function prompts the user to assign values to each variable found in the expression tree. The values should be stored in the Variables struct.
 void promptVariables(Node *root)
 {
@@ -197,4 +157,64 @@ float calculate(Node *root)
 
 	printf("Error: Unknown operator %s\n", root->data);
 	return 0;
+}
+
+// The areParenthesesBalanced checks if all paratheses are closed by the end of the expression.
+bool areParenthesesBalanced(char *expr)
+{
+	int balance = 0;
+	// Checks all characters besides null character
+	for (int i = 0; expr[i] != '\0'; i++)
+	{
+		if (expr[i] == '(')
+			balance++;
+		if (expr[i] == ')')
+			balance--;
+		if (balance != 0)
+			return false; // More closing than opening or vice versa
+	}
+	return true;
+}
+
+// The isValidExpression validates that the input expression contains valid characters
+bool isValidExpression(char *expr)
+{
+	for (int i = 0; expr[i] != '\0'; i++)
+	{
+		if (!isdigit(expr[i]) && expr[i] != '.' && expr[i] != '+' &&
+			expr[i] != '-' && expr[i] != '*' && expr[i] != '/' &&
+			expr[i] != '(' && expr[i] != ')' && !isalpha(expr[i]))
+			return false; // Invalid character found
+	}
+	return true; // All characters are valid
+}
+
+/*
+ * The getOrCreateVariable function retrieves an existing variable or creates a new one.
+ * If the variable is undefined, it assigns a default value of 0.00 and displays a warning.
+ */
+Variable *getOrCreateVariable(char *name)
+{
+	// Check if the variable already exists in the list
+	for (int i = 0; i < varCount; i++)
+	{
+		if (strcmp(variables[i].varName, name) == 0)
+			return &variables[i];
+	}
+
+	// Variable is undefined; print a warning and create a new entry
+	printf("Warning: Variable %s is undefined. Using 0.00 as default.\n", name);
+
+	// If space for new variable exists, create a new entry with default value
+	if (varCount < 10)
+	{
+		Variable *var = &variables[varCount++];
+		strcpy(var->varName, name);
+		var->value = 0.0; // Default value for undefined variables
+		return var;
+	}
+
+	// If max capacity of variables is reached
+	printf("Error: Maximum number of variables reached. Cannot create %s.\n", name);
+	return NULL;
 }

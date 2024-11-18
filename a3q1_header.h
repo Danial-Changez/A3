@@ -24,7 +24,8 @@ typedef struct
 extern Variable variables[10];
 extern int varCount;
 
-bool areParenthesesBalanced(const char *expr);
+bool isValidExpression(char *expr);
+bool areParenthesesBalanced(char *expr);
 Variable *getOrCreateVariable(char *name);
 Node *createNode(char *data);
 Node *parseExpression(char *expr);
