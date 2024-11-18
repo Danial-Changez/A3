@@ -67,6 +67,10 @@ Yes, the assignment is complete. Both programs are fully functional and include 
 - **Question 2**:
   - Tested with `f.dat`, containing 200 integers formatted as 20 rows by 10 columns.
   - Verified max-heap construction with correct outputs.
+  - **Additional Cases**:
+    1. Invalid `f.dat` file with fewer than 200 integers: Proper error message displayed.
+    2. File with non-integer characters: The program does not validate non-integer data, which could lead to issues.
+
 
 ### **Valgrind Testing**
 - After adding **fclose** to the main file for q2, **no memory leaks** were detected using Valgrind
