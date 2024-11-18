@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include <ctype.h>
 #include "a3q1_header.h"
 
@@ -18,6 +19,23 @@ Node *createNode(char *data)
 	return newNode;
 }
 
+// The areParenthesesBalanced checks if all paratheses are closed by the end of the expression.
+bool areParenthesesBalanced(const char *expr)
+{
+	int balance = 0;
+	// Checks all characters besides null character
+	for (int i = 0; expr[i] < strlen(expr); i++)
+	{
+		if (expr[i] == '(')
+			balance++;
+		if (expr[i] == ')')
+			balance--;
+		if (balance < 0)
+			return false; // More closing than opening
+	}
+	return true;
+}
+
 // The parseExpression function parses the expression string passed in from command line, stores the information in a new node, and returns the root node of the tree.
 Node *parseExpression(char *expr)
 {
@@ -25,9 +43,15 @@ Node *parseExpression(char *expr)
 	if (len == 0)
 		return NULL;
 
-	// Base case if a single variable or number
+	// If a single variable or number
 	if (expr[0] != '(')
 		return createNode(expr);
+
+	if (areParenthesesBalanced(expr))
+	{
+		printf("Unbalanced parantheses in expression %s\n", expr);
+		return NULL;
+	}
 
 	// Location of main operator
 	int brackets = 0, operatorPos = -1;
@@ -100,6 +124,7 @@ void postorder(Node *root)
 	printf("%s ", root->data);
 }
 
+// The getOrCreateVariable function gets variable from array (if it exists), otherwise creates a new entry.
 Variable *getOrCreateVariable(char *name)
 {
 	// Check if the variable already exists in the list
