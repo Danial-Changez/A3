@@ -46,9 +46,6 @@ In addition to class notes, slides, and examples, I consulted online resources t
    - Valgrind was used to detect memory leaks.
    - [Valgrind Documentation](https://valgrind.org/docs/manual/quick-start.html)
 
-4. **Heap Algorithms**:
-   - [Heap Data Structure](https://www.geeksforgeeks.org/heap-data-structure/)
-
 
 ## **Implementation**
 ### **Is the assignment complete?**
